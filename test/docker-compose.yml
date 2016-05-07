@@ -1,0 +1,28 @@
+version: "2"
+services:
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: janky
+        ports:
+            - "5432"
+    dev:
+        build: .
+        command: "npm start"
+        environment:
+            RACK_ENV: development
+            DATABASE_URL: postgres://janky@postgres:5432/janky_development
+        links:
+            - postgres
+        ports:
+            - "8080"
+    test:
+        build:
+            context: .
+        image: airmail/test
+        command: "npm test"
+        environment:
+            RACK_ENV: test
+            DATABASE_URL: postgres://janky@postgres:5432/janky_test
+        links:
+            - postgres
