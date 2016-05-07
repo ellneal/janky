@@ -159,6 +159,10 @@ class JankyTest < Test::Unit::TestCase
     assert get("#{Janky::Build.last.id}/output").ok?
   end
 
+  test "status api" do
+    assert get("/status").ok?
+  end
+
   test "hubot setup" do
     Janky::GitHub.repo_make_private("github/github")
     assert hubot_setup("github/github").body.

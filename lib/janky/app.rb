@@ -38,6 +38,10 @@ module Janky
       end
     end
 
+    get "/status" do
+      { ok: true }.to_json
+    end
+
     get "/?" do
       authorize_index
       @builds = Build.queued.first(50)
