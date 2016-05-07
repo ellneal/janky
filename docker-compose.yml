@@ -1,0 +1,35 @@
+version: "2"
+services:
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: janky
+        networks:
+            - janky
+    dev:
+        build: 
+            context: .
+        environment:
+            RACK_ENV: development
+            DATABASE_URL: postgres://janky@postgres:5432/janky
+        networks:
+            - janky
+        ports:
+            - "8080"
+    test:
+        build:
+            context: .
+        image: janky/test
+        command: ["script/test"]
+        environment:
+            RACK_ENV: test
+            DATABASE_URL: postgres://janky@postgres:5432/janky
+        volumes:
+            - ./:/usr/lib/janky
+        depends_on:
+            - postgres
+        networks:
+            - janky
+networks:
+    janky:
+        driver: bridge
